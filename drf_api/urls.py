@@ -14,8 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 urlpatterns = [
+    # path('', TemplateView.as_view(template_name='index.html')),
     path('admin/', admin.site.urls),
+    # path('api/', include('drf_api.urls')),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
+# handler404 = TemplateView.as_view(template_name='index.html')
