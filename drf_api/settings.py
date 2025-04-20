@@ -39,7 +39,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = DEBUG = 'DEV' in os.environ
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'project-5-productivity-backend-1b67e4c3722a.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1',
+                 'project-5-productivity-backend-1b67e4c3722a.herokuapp.com']
 
 
 # Application definition
@@ -55,6 +56,8 @@ INSTALLED_APPS = [
     'cloudinary',
     'dj_rest_auth.registration',
     'corsheaders',
+    'productivity_app',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -70,10 +73,10 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-origin for origin in [
-    os.environ.get('CLIENT_ORIGIN'),
-    os.environ.get('CLIENT_ORIGIN_DEV')
-] if origin
+    origin for origin in [
+        os.environ.get('CLIENT_ORIGIN'),
+        os.environ.get('CLIENT_ORIGIN_DEV')
+    ] if origin
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -178,3 +181,9 @@ WHITENOISE_ROOT = BASE_DIR / 'staticfiles' / 'build'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
