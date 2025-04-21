@@ -58,7 +58,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'productivity_app',
     'rest_framework',
-    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -184,29 +183,7 @@ WHITENOISE_ROOT = BASE_DIR / 'staticfiles' / 'build'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',  # If using JWT
-        'rest_framework.authentication.SessionAuthentication',  # For browsable API
-        'rest_framework.authentication.BasicAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    ]
-}
-
-
-AUTH_USER_MODEL = 'productivity_app.CustomUser'
-
-# Configure djoser (example, adjust as needed)
-DJOSER = {
-    'USER_ID_FIELD': 'id',
-    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
-    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': False,  # Set to True if you want email verification
-}
-
-# If using Simple JWT for authentication (recommended for SPAs)
-SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('Bearer',),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
 }
