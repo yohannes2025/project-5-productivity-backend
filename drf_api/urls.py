@@ -15,17 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from productivity_app.views import RegisterView
-from django.views.generic import RedirectView
 
 urlpatterns = [
+    # path('', TemplateView.as_view(template_name='index.html')),
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
-    path('api/', include('productivity_app.urls')),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('register/', RegisterView.as_view(), name='register'),
-    path('api/register/', RegisterView.as_view(), name='register'),
-    path('', RedirectView.as_view(url='/api/', permanent=False)),
+    # path('api/', include('drf_api.urls')),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
+# handler404 = TemplateView.as_view(template_name='index.html')
