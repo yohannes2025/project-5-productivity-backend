@@ -2,7 +2,6 @@ from rest_framework import serializers
 from .models import Task, UserProfile
 from django.contrib.auth.models import User
 
-
 # class UserProfileSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = UserProfile
@@ -15,6 +14,7 @@ from django.contrib.auth.models import User
 #         profile = UserProfile.objects.create(
 #             user=user_instance, **validated_data)
 #         return profile
+
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
