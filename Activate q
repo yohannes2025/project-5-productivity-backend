@@ -1,0 +1,266 @@
+[33mcommit e6956d4a239c158bc9f3d985bc6bfcaa9d11bfe0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Fri Apr 25 23:23:37 2025 +0200
+
+    Add views.py and serializers.py files for the Task and User profile models
+
+[33mcommit 1987fdf12d7f6a16aaaff43f842d4b91f03a97ca[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Fri Apr 25 23:17:44 2025 +0200
+
+    Add the Task model to the models.py productivity applicaton of django background
+
+[33mcommit 56cb6fc66f87575c9bb8f80e03ade1b6eaa75096[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Fri Apr 25 15:15:20 2025 +0200
+
+    Add user profile model to productivity_app application
+
+[33mcommit 010f16734d5a44a5751af3915534cfd2e8c8011a[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Mon Apr 21 18:07:07 2025 +0200
+
+    Update .gitignore
+
+[33mcommit e11c45c5b4b247f71ba13363714264c57c0724eb[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Mon Apr 21 17:52:33 2025 +0200
+
+    Insert venv in .gitignore
+
+[33mcommit c5ff088d3b5f413cc964bdc2e7b6d5cae1d1497a[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Mon Apr 21 17:46:03 2025 +0200
+
+    Gitignore issue
+
+[33mcommit 5a9b32431495a6b912d39f127981af76888a1aa1[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Mon Apr 21 17:39:57 2025 +0200
+
+    Fix error with .gitignore
+
+[33mcommit bd506fce1116400b21322956598ef99a92f875ca[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Mon Apr 21 17:34:11 2025 +0200
+
+    Gitignore update
+
+[33mcommit e716d6d1d4b952e0cc67f21375dde16f1e4f4b17[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Mon Apr 21 16:41:06 2025 +0200
+
+    Revert " add models, views and serializers to to the app"
+    
+    This reverts commit 4ea81c26d9c25d8e21e4dac28cd771eca746e73a.
+
+[33mcommit d49798a47cdae66f558c6dbf3018b697c3c8f999[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Mon Apr 21 16:34:54 2025 +0200
+
+    Remove venv folder and sensitive files from repo
+
+[33mcommit 4145d5db7a3e86927f17a460a944764e09f52bab[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Mon Apr 21 16:33:15 2025 +0200
+
+    Remove cached Azure AD test file
+
+[33mcommit ce6cbaa16cf1f8adcf973510bd4a113615f2b9a7[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Mon Apr 21 16:21:41 2025 +0200
+
+    Remove secrets and exclude __pycache__
+
+[33mcommit 75dd31b41a7485df998226d5efadc269096bcd93[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Mon Apr 21 16:16:42 2025 +0200
+
+    Add venv to .gitignore
+
+[33mcommit a5520e84c3e5b6c153131ab6e4a178feb85af572[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Mon Apr 21 16:14:07 2025 +0200
+
+    Remove venv directory from repository
+
+[33mcommit 4ea81c26d9c25d8e21e4dac28cd771eca746e73a[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Mon Apr 21 16:10:49 2025 +0200
+
+     add models, views and serializers to to the app
+
+[33mcommit 2e3a5a36848a87f73c2e2602e437b85213dd9491[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sun Apr 20 22:01:13 2025 +0200
+
+    Recreate the virtual environment to fix permission error
+
+[33mcommit 1a8669b6ab861f751ca2676bb83fb41816ebd365[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sun Apr 20 12:48:15 2025 +0200
+
+    Finalize deployment
+
+[33mcommit 2859ab3f4f71bee18506bd418198b4040e3f5d34[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sun Apr 20 10:35:46 2025 +0200
+
+    Combine existing DRF and React projects into the same workspace
+
+[33mcommit 36b309e17bc9faeae82d5ed887fd6de72b0157ac[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 23:27:14 2025 +0200
+
+    Unify the Frontend and the Backend
+
+[33mcommit e8de1509914872e59dba9c70f4110a85b6721112[m
+Merge: a156672f 3d3d10fc
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 20:41:17 2025 +0200
+
+    Merge branch 'main' of https://github.com/yohannes2025/project-5-productivity-backend
+
+[33mcommit a156672f081d861b50079803eec01ae490878b2d[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 20:38:20 2025 +0200
+
+    Create supperuser
+
+[33mcommit 3d3d10fca61e1c6e5faa693df684df444e1fe092[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 20:38:20 2025 +0200
+
+    Create super user
+
+[33mcommit 2c49185b9ac5b4570030c882704bd9104154afd4[m
+Merge: 6b80ea56 323709b4
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 20:16:32 2025 +0200
+
+    Merge branch 'main' of https://github.com/yohannes2025/project-5-productivity-backend
+
+[33mcommit 6b80ea565cfbba4d5813c291de764db84bc5b9bf[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 19:41:08 2025 +0200
+
+    Add Heroku domain to ALLOWED_HOSTS
+
+[33mcommit 52de4016e9942572daea45912902ceb2c2fd7486[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 19:32:16 2025 +0200
+
+    Add dj-rest-auth to requirements
+
+[33mcommit 5c058d8883c2b200de0510dffd3e70d0c0dc3182[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 19:30:53 2025 +0200
+
+    Add dj-rest-auth to require
+
+[33mcommit 3b212730f660ad64c59cc55d99ef6e617f24425b[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 19:24:56 2025 +0200
+
+    Update requirements for Heroku deployment
+
+[33mcommit fe9b7777f04e0a2ab3c8f494d4bb7f2b639234c3[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 19:19:17 2025 +0200
+
+    Add runtime.txt to specify Python 3.12 for Heroku
+
+[33mcommit d93d1448ad1aab2c54626c1de3b0f6d50920a8ee[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 19:09:23 2025 +0200
+
+    Chanage the SECRETE_KEY
+
+[33mcommit 868479ea1111d9afb457c62ef6edd7c24ef46a60[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 19:04:32 2025 +0200
+
+    Add SECRET_KEY to env.py
+
+[33mcommit 1248a83363a9ed9ec46ac5bd771a0478a1532454[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 18:54:54 2025 +0200
+
+    Add requirements setup for Heroku deployment
+
+[33mcommit 323709b4e8bdf4584ca129278d3f59ce15723a21[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 19:41:08 2025 +0200
+
+    Add Heroku domain to ALLOWED_HOSTS
+
+[33mcommit c3dde59c20ec9231e5ed26c37586b9ac619332db[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 19:32:16 2025 +0200
+
+    Add dj-rest-auth to requirements
+
+[33mcommit a2a4806e50c33c5ad412ce39540b5d9c6fbf557e[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 19:30:53 2025 +0200
+
+    Add dj-rest-auth to require
+
+[33mcommit 5468bef55d95de32415f541068c997cd74e048ed[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 19:24:56 2025 +0200
+
+    Update requirements for Heroku deployment
+
+[33mcommit a6e5346fc21625a33a257df64d869e3c6b9eaff1[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 19:19:17 2025 +0200
+
+    Add runtime.txt to specify Python 3.12 for Heroku
+
+[33mcommit 8f4e915d93be9be02bb62ad4536749c808aaa652[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 19:09:23 2025 +0200
+
+    Chanage the SECRETE_KEY
+
+[33mcommit f5da8fcb995bec8ff46286275f1ca31f9378fa83[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 19:04:32 2025 +0200
+
+    Add SECRET_KEY to env.py
+
+[33mcommit f0d131726f1636046c6a1dac35d9625df8700bc0[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 18:54:54 2025 +0200
+
+    Add requirements setup for Heroku deployment
+
+[33mcommit 932b9db7ae5444177ba8fed597a816c813339763[m
+Merge: 1ab1bff9 80a44f6a
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 17:43:37 2025 +0200
+
+    Merge branch 'main' of https://github.com/yohannes2025/project-5-productivity-backend
+
+[33mcommit 1ab1bff9778760d14ae22889a31cc046900837cf[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 17:43:02 2025 +0200
+
+    Set up project with initial configurations:
+    - Install packages: Django, Cloudinary, Pillow
+    - Create new project
+    - Create env.py file to store Cloudinary URL value
+    - Update settings.py: add Cloudinary to INSTALLED_APPS and configure storage
+
+[33mcommit 80a44f6a14d3e3058a020698b5c257e0cf283a9b[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 17:26:16 2025 +0200
+
+    first commit
+
+[33mcommit 067cd6939425324d36b605a5069aba532687cb80[m
+Author: yohannes2025 <johannes.m.tekle@gmail.com>
+Date:   Sat Apr 19 17:24:44 2025 +0200
+
+    first commit

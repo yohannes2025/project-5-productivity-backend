@@ -1,31 +1,18 @@
 from rest_framework import serializers
-from .models import Task, UserProfile
+from .models import Task, Profile
 from django.contrib.auth.models import User
 
-# class UserProfileSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = UserProfile
-#         fields = ['id', 'user', 'name', 'file',
-#                   'other_info', 'created_at', 'updated_at']
 
-#     def create(self, validated_data):
-#         user_data = validated_data.pop('user')
-#         user_instance = User.objects.create(**user_data)
-#         profile = UserProfile.objects.create(
-#             user=user_instance, **validated_data)
-#         return profile
-
-
-class UserProfileSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserProfile
+        model = Profile
         fields = ['id', 'name', 'email', 'file',
                   'other_info', 'created_at', 'updated_at']
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
         user_instance = User.objects.create(**user_data)
-        profile = UserProfile.objects.create(
+        profile = Profile.objects.create(
             user=user_instance, **validated_data)
         return profile
 
@@ -36,7 +23,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'Name': instance.name,  # Profile name
             'Email': instance.user.email,  # User email
             'Attachment': instance.file.url if instance.file else None,  # File URL if available
-            'Other Info': instance.other_info,  # Other info from the UserProfile
+            'Other Info': instance.other_info,  # Other info from the Profile
         }
         return user_data
 
