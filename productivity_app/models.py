@@ -66,10 +66,10 @@ class Task(models.Model):
         return self.title
 
 
-class UserProfile(models.Model):
+class Profile(models.Model):
     """
     Extends the built-in User model to include additional profile information,
-    such as avatar, display name, and user-specific other information.
+    such as email, display name, and user-specific other information.
     """
     user = models.OneToOneField(
         User,
@@ -90,7 +90,8 @@ class UserProfile(models.Model):
     name = models.CharField(max_length=255, blank=True,
                             help_text="Display name for the user")
     file = models.FileField(upload_to='uploads/', null=True, blank=True)
-    other_info = models.JSONField(null=True, blank=True)
+    other_info = models.CharField(max_length=255, blank=True,
+                                  help_text="Additional infromation")
 
     class Meta:
         ordering = ['-created_at']
@@ -99,14 +100,14 @@ class UserProfile(models.Model):
         return f"{self.user}"
 
 
-# Signal to auto-create a UserProfile when a new User is created
-def create_userprofile(sender, instance, created, **kwargs):
+# Signal to auto-create a Profile when a new User is created
+def create_profile(sender, instance, created, **kwargs):
     """
-    Signal handler that creates a UserProfile when a new User instance is created.
+    Signal handler that creates a Profile when a new User instance is created.
     """
     if created:
-        UserProfile.objects.create(user=instance)
+        Profile.objects.create(user=instance)
 
 
 # Connect the signal to the User model
-post_save.connect(create_userprofile, sender=User)
+post_save.connect(create_profile, sender=User)

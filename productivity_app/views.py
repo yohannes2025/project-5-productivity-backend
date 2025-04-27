@@ -1,16 +1,16 @@
 from rest_framework import viewsets
-from .models import Task, UserProfile
-from .serializers import TaskSerializer, UserProfileSerializer
+from .models import Task, Profile
+from .serializers import TaskSerializer, ProfileSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 
 
-class UserProfileViewSet(viewsets.ModelViewSet):
+class ProfileViewSet(viewsets.ModelViewSet):
     """
-    A viewset for viewing and editing UserProfile instances.
+    A viewset for viewing and editing Profile instances.
     """
-    queryset = UserProfile.objects.all()
-    serializer_class = UserProfileSerializer
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
     # permission_classes = [IsAuthenticated]
     # Enable token authentication
     # authentication_classes = [TokenAuthentication]
