@@ -1,7 +1,13 @@
+from django.contrib.auth import get_user_model, authenticate
 from django.core.exceptions import ValidationError
-from rest_framework import serializers
+from rest_framework import serializers, generics
 from .models import Task, Profile
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from django.contrib.auth import get_user_model
+from rest_framework import serializers
+
+User = get_user_model()
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -94,7 +100,242 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
     def validate(self, attrs):
+        # Check if the passwords match
         if attrs['password'] != attrs['confirm_password']:
             raise serializers.ValidationError(
                 {"password": "Passwords must match."})
+
+        # Validate password strength
+        self.validate_password_strength(attrs['password'])
+
+        return attrs
+
+    def validate_password_strength(self, password):
+        """Check the strength of the password."""
+        min_length = 8  # Example minimum length
+
+        if len(password) < min_length:
+            raise serializers.ValidationError(
+                {"password": f"Password must be at least {min_length} characters long."})
+
+
+# class LoginSerializer(serializers.Serializer):
+#     email = serializers.EmailField()
+#     password = serializers.CharField(write_only=True)
+
+#     def validate(self, attrs):
+#         email = attrs.get('email')
+#         password = attrs.get('password')
+
+#         if email and password:
+#             user = authenticate(request=self.context.get(
+#                 'request'), username=email, password=password)
+#             if not user:
+#                 raise serializers.ValidationError('Invalid email or password.')
+#         else:
+#             raise serializers.ValidationError(
+#                 'Must include "email" and "password".')
+
+#         attrs['user'] = user
+#         return attrs
+
+# class LoginSerializer(serializers.Serializer):
+#     email = serializers.EmailField()
+#     password = serializers.CharField(write_only=True)
+
+#     def validate(self, attrs):
+#         email = attrs.get('email')
+#         password = attrs.get('password')
+
+#         if email and password:
+#             user = authenticate(request=self.context.get(
+#                 'request'), username=email, password=password)
+#             if not user:
+#                 raise serializers.ValidationError('Invalid email or password.')
+#         else:
+#             raise serializers.ValidationError(
+#                 'Must include "email" and "password".')
+
+#         attrs['user'] = user
+#         return attrs
+
+
+# class LoginSerializer(serializers.Serializer):
+#     email = serializers.EmailField()
+#     password = serializers.CharField(write_only=True)
+
+#     def validate(self, attrs):
+#         email = attrs.get('email')
+#         password = attrs.get('password')
+
+#         if not email or not password:
+#             raise serializers.ValidationError(
+#                 'Must include "email" and "password".'
+#             )
+
+#         try:
+#             user = authenticate(request=self.context.get(
+#                 'request'), username=email, password=password)
+#         except ValueError as e:
+#             raise serializers.ValidationError(
+#                 f"An error occurred during authentication: {e}"
+#             )
+
+#         if not user:
+#             raise serializers.ValidationError('Invalid email or password.')
+
+#         attrs['user'] = user
+#         return attrs
+
+# class LoginSerializer(serializers.Serializer):
+#     email = serializers.EmailField()
+#     password = serializers.CharField(write_only=True)
+
+#     def validate(self, attrs):
+#         email = attrs.get('email')
+#         password = attrs.get('password')
+
+#         if not email or not password:
+#             raise serializers.ValidationError(
+#                 'Must include "email" and "password".'
+#             )
+
+#         try:
+#             user = authenticate(request=self.context.get(
+#                 'request'), username=email, password=password)
+#         except ValueError as e:
+#             # Handle potential ValueError during authentication
+#             # This is crucial for security; don't expose internal errors.
+#             raise serializers.ValidationError(
+#                 f"An error occurred during authentication: {e}"
+#             )
+
+#         if not user:
+#             raise serializers.ValidationError('Invalid email or password.')
+
+#         if not user.is_active:
+#             raise serializers.ValidationError("User account is inactive.")
+
+#         attrs['user'] = user
+#         return attrs
+
+
+# class LoginSerializer(serializers.Serializer):
+#     email = serializers.EmailField()
+#     password = serializers.CharField(write_only=True)
+
+#     def validate(self, attrs):
+#         email = attrs.get('email')
+#         password = attrs.get('password')
+
+#         if not email or not password:
+#             raise serializers.ValidationError(
+#                 'Must include "email" and "password".'
+#             )
+
+#         try:
+#             user = authenticate(request=self.context.get(
+#                 'request'), username=email, password=password)
+#         except ValueError as e:
+#             raise serializers.ValidationError(
+#                 f"An error occurred during authentication: {e}"
+#             )
+
+#         if not user:
+#             raise serializers.ValidationError('Invalid email or password.')
+
+#         if not user.is_active:
+#             raise serializers.ValidationError("User account is inactive.")
+
+#         attrs['user'] = user
+#         return attrs
+
+# class LoginSerializer(serializers.Serializer):
+#     email = serializers.EmailField()
+#     password = serializers.CharField(write_only=True)
+
+#     def validate(self, attrs):
+#         email = attrs.get('email')
+#         password = attrs.get('password')
+
+#         if not email or not password:
+#             raise serializers.ValidationError(
+#                 'Must include "email" and "password".'
+#             )
+
+#         try:
+#             user = authenticate(request=self.context.get(
+#                 'request'), username=email, password=password)
+#         except ValueError as e:
+#             # Handle potential ValueError during authentication
+#             # This is crucial for security; don't expose internal errors.
+#             raise serializers.ValidationError(
+#                 f"An error occurred during authentication: {e}"
+#             )
+
+#         if not user:
+#             raise serializers.ValidationError('Invalid email or password.')
+
+#         if not user.is_active:
+#             raise serializers.ValidationError("User account is inactive.")
+
+#         attrs['user'] = user
+#         return attrs
+
+# class LoginSerializer(serializers.Serializer):
+#     email = serializers.EmailField()
+#     password = serializers.CharField(write_only=True)
+
+#     def validate(self, attrs):
+#         email = attrs.get('email')
+#         password = attrs.get('password')
+
+#         if not email or not password:
+#             raise serializers.ValidationError(
+#                 'Must include "email" and "password".'
+#             )
+
+#         try:
+#             user = authenticate(request=self.context.get(
+#                 'request'), username=email, password=password)
+#         except ValueError as e:
+#             # Handle potential ValueError during authentication
+#             # This is crucial for security; don't expose internal errors.
+#             raise serializers.ValidationError(
+#                 f"An error occurred during authentication: {e}"
+#             )
+
+#         if not user:
+#             raise serializers.ValidationError('Invalid email or password.')
+
+#         if not user.is_active:
+#             raise serializers.ValidationError("User account is inactive.")
+
+#         attrs['user'] = user
+#         return attrs
+
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        if not email or not password:
+            raise serializers.ValidationError(
+                'Must include "email" and "password".'
+            )
+
+        user = authenticate(request=self.context.get(
+            'request'), username=email, password=password)
+
+        if not user:
+            raise serializers.ValidationError('Invalid email or password.')
+
+        if not user.is_active:
+            raise serializers.ValidationError("User account is inactive.")
+
+        attrs['user'] = user
         return attrs
