@@ -204,3 +204,13 @@ REST_FRAMEWORK = {
         'rest_framework.filters.OrderingFilter',
     ]
 }
+
+AUTHENTICATION_BACKENDS = [
+    'productivity_app.auth.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+AUTHENTICATION_BACKENDS = [
+    'productivity_app.auth.backends.CustomAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',  # fallback
+]
