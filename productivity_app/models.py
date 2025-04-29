@@ -64,7 +64,7 @@ class Task(models.Model):
         return timezone.now().date() > self.due_date
 
     def __str__(self):
-        return self.title
+        return self.task_title
 
 
 class Profile(models.Model):
