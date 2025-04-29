@@ -19,8 +19,9 @@ class Task(models.Model):
         ('done', 'Done'),
     ]
 
-    title = models.CharField(max_length=255, help_text="Title of the task")
-    description = models.TextField(
+    task_title = models.CharField(
+        max_length=255, help_text="Title of the task")
+    task_description = models.TextField(
         help_text="Detailed description of the task")
     due_date = models.DateField(help_text="Deadline for the task")
     priority = models.CharField(
@@ -31,12 +32,18 @@ class Task(models.Model):
     category = models.CharField(
         max_length=100, blank=True, null=True, help_text="Optional category for grouping tasks"
     )
+    status = models.CharField(
+        max_length=20,
+        choices=STATE_CHOICES,
+        default='pending',
+        help_text="Current state of the task"
+    )
     assigned_users = models.ManyToManyField(
         User,
         related_name='assigned_tasks',
         help_text="Users assigned to this task"
     )
-    files = models.FileField(
+    upload_files = models.FileField(
         upload_to='task_files',
         blank=True,
         null=True,
@@ -47,12 +54,6 @@ class Task(models.Model):
     )
     updated_at = models.DateTimeField(
         auto_now=True, help_text="Date and time when the task was last updated"
-    )
-    state = models.CharField(
-        max_length=20,
-        choices=STATE_CHOICES,
-        default='pending',
-        help_text="Current state of the task"
     )
 
     @property
@@ -89,7 +90,6 @@ class Profile(models.Model):
         max_length=254, unique=True, null=True, blank=True)
     name = models.CharField(max_length=255, blank=True,
                             help_text="Display name for the user")
-    file = models.FileField(upload_to='uploads/', null=True, blank=True)
     other_info = models.CharField(max_length=255, blank=True,
                                   help_text="Additional infromation")
 
