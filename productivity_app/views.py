@@ -2,17 +2,18 @@
 from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.views import APIView
+from rest_framework import views
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Task, Profile
 from .serializers import TaskSerializer, ProfileSerializer, RegisterSerializer, LoginSerializer
-from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 # from productivity_app.auth import LoginView, LogoutView
 from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.models import User
 from rest_framework.exceptions import ValidationError
+from .serializers import UserSerializer
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -47,6 +48,13 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save()
+
+
+class UsersListAPIView(views.APIView):
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
 
 
 class RegisterViewSet(generics.CreateAPIView):
