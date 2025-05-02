@@ -43,7 +43,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = ['id', 'task_title', 'task_description', 'due_date', 'priority', 'category', 'status',
+        fields = ['id', 'title', 'description', 'due_date', 'priority', 'category', 'status',
                   'assigned_users', 'upload_files', 'created_at', 'updated_at', 'is_overdue']
 
     def create(self, validated_data):
@@ -57,10 +57,10 @@ class TaskSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         # Update the task instance with provided data
-        instance.task_title = validated_data.get(
-            'task_title', instance.task_title)
-        instance.task_description = validated_data.get(
-            'task_description', instance.task_description)
+        instance.title = validated_data.get(
+            'title', instance.title)
+        instance.description = validated_data.get(
+            'description', instance.description)
         instance.due_date = validated_data.get('due_date', instance.due_date)
         instance.priority = validated_data.get('priority', instance.priority)
         instance.category = validated_data.get('category', instance.category)

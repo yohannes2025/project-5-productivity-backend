@@ -19,9 +19,9 @@ class Task(models.Model):
         ('done', 'Done'),
     ]
 
-    task_title = models.CharField(
+    title = models.CharField(
         max_length=255, help_text="Title of the task")
-    task_description = models.TextField(
+    description = models.TextField(
         help_text="Detailed description of the task")
     due_date = models.DateField(help_text="Deadline for the task")
     priority = models.CharField(
