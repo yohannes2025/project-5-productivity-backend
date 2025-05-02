@@ -30,10 +30,10 @@ class ProfileViewSet(viewsets.ModelViewSet):
             # Optionally return an empty queryset or raise an error
             return Profile.objects.none()  # Return an empty queryset
 
-    def list(self, request, *args, **kwargs):
-        # override the list method to handle the unauthorized case
-        if not request.user.is_authenticated:
-            return Response({'error': 'Authentication required.'}, status=status.HTTP_401_UNAUTHORIZED)
+    # def list(self, request, *args, **kwargs):
+    #     # override the list method to handle the unauthorized case
+    #     if not request.user.is_authenticated:
+    #         return Response({'error': 'Authentication required.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 class TaskViewSet(viewsets.ModelViewSet):
