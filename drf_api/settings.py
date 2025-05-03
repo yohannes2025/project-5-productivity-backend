@@ -80,9 +80,9 @@ CORS_ALLOWED_ORIGINS = [
     ] if origin
 ]
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",  # Your React app
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Your React app
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
