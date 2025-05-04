@@ -6,7 +6,7 @@ from .views import LoginViewSet, TaskViewSet, ProfileViewSet, RegisterViewSet, U
 router = DefaultRouter()
 router.register(r'tasks', TaskViewSet, basename='task')
 router.register(r'profiles', ProfileViewSet, basename='profile')
-# router.register(r'users', TaskViewSet, basename='users-list')
+# router.register(r'users', UsersListAPIView, basename='users-list')
 
 urlpatterns = [
     path('api/register/', RegisterViewSet.as_view(), name='register'),

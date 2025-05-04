@@ -14,8 +14,7 @@ User = get_user_model()
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['id', 'name', 'email',
-                  'other_info', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'email', 'created_at', 'updated_at']
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
@@ -30,7 +29,6 @@ class ProfileSerializer(serializers.ModelSerializer):
             'id': instance.user.id,  # User ID
             'Name': instance.name,  # Profile name
             'Email': instance.user.email,  # User email
-            'Other Info': instance.other_info,  # Other info from the Profile
         }
         return user_data
 
