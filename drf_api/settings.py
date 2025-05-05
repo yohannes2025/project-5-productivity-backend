@@ -73,12 +73,12 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    origin for origin in [
-        os.environ.get('CLIENT_ORIGIN'),
-        os.environ.get('CLIENT_ORIGIN_DEV')
-    ] if origin
-]
+# CORS_ALLOWED_ORIGINS = [
+#     origin for origin in [
+#         os.environ.get('CLIENT_ORIGIN'),
+#         os.environ.get('CLIENT_ORIGIN_DEV')
+#     ] if origin
+# ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Your React app
