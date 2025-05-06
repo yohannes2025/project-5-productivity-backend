@@ -1,3 +1,4 @@
+# productivity_app/models.py
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -65,13 +66,13 @@ class Task(models.Model):
         return timezone.now().date() > self.due_date
 
     def __str__(self):
-        return self.task_title
+        return self.self.title
 
 
 class Profile(models.Model):
     """
     Extends the built-in User model to include additional profile information,
-    such as email, display name, and user-specific other information.
+    such as email and display name.
     """
     user = models.OneToOneField(
         User,
