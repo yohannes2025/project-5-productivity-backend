@@ -1,4 +1,4 @@
-# serializers.py
+# productivity_app/serializers.py
 from django.contrib.auth import get_user_model, authenticate
 from django.core.exceptions import ValidationError
 from rest_framework import serializers, generics
@@ -93,7 +93,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ('name', 'email', 'password', 'confirm_password')
 
     def create(self, validated_data):
-        validated_data.pop('confirm_password')  # Remove confirm_password
+        validated_data.pop('confirm_password')  # Confirm_password
 
         # Check if the username already exists
         if User.objects.filter(username=validated_data['name']).exists():
@@ -121,7 +121,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def validate_password_strength(self, password):
         """Check the strength of the password."""
-        min_length = 8  # Example minimum length
+        min_length = 8  # Minimum character length
 
         if len(password) < min_length:
             raise serializers.ValidationError(
