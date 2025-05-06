@@ -21,6 +21,15 @@ class Task(models.Model):
         ('done', 'Done'),
     ]
 
+    # Define CATEGORY_CHOICES within the Task model class
+    CATEGORY_CHOICES = [
+        ('development', 'Development'),
+        ('design', 'Design'),
+        ('testing', 'Testing'),
+        ('documentation', 'Documentation'),
+        ('other', 'Other'),
+    ]
+
     title = models.CharField(
         max_length=255, help_text="Title of the task")
     description = models.TextField(
@@ -32,7 +41,17 @@ class Task(models.Model):
         help_text="Priority level of the task"
     )
     category = models.CharField(
-        max_length=100, blank=True, null=True, help_text="Optional category for grouping tasks"
+
+        max_length=100,
+
+        choices=CATEGORY_CHOICES,  # Use the defined choices
+
+        blank=True,
+
+        null=True,
+
+        help_text="Optional category for grouping tasks"
+
     )
     status = models.CharField(
         max_length=20,
@@ -63,10 +82,10 @@ class Task(models.Model):
         """
         Check if the task is overdue based on the current date.
         """
-        return timezone.now().date() > self.due_date
+        return timezone.now().date() > self.due_date if self.due_date else False
 
     def __str__(self):
-        return self.self.title
+        return self.title
 
 
 class Profile(models.Model):
