@@ -3,16 +3,17 @@ from rest_framework import generics
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework import views
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Task, Profile
 from .serializers import TaskSerializer, ProfileSerializer, RegisterSerializer, LoginSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 # from productivity_app.auth import LoginView, LogoutView
+from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.models import User
+from rest_framework.exceptions import ValidationError
 from .serializers import UserSerializer
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
@@ -41,17 +42,15 @@ class TaskViewSet(viewsets.ModelViewSet):
     """
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    authentication_classes = [JWTAuthentication]  # Require JWT authentication
-    permission_classes = [IsAuthenticated]  # Only authenticate
+    # permission_classes = [IsAuthenticated]
+    # Enable token authentication
+    # authentication_classes = [TokenAuthentication]
 
     def perform_create(self, serializer):
         serializer.save()
 
 
 class UsersListAPIView(views.APIView):
-    authentication_classes = [JWTAuthentication]  # Require JWT Authentication
-    permission_classes = [IsAuthenticated]
-
     def get(self, request):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
