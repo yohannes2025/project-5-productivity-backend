@@ -1,56 +1,117 @@
-# models.py
-from rest_framework import generics
-from rest_framework import viewsets
-from rest_framework.views import APIView
-from rest_framework import views
-from rest_framework.decorators import api_view
+# views.py
+from rest_framework import generics, viewsets, views, status
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from .models import Task, Profile
-from .serializers import TaskSerializer, ProfileSerializer, RegisterSerializer, LoginSerializer
+from .serializers import TaskSerializer, ProfileSerializer, RegisterSerializer, LoginSerializer, UserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
-# from productivity_app.auth import LoginView, LogoutView
-from django.contrib.auth import get_user_model, authenticate
 from django.contrib.auth.models import User
-from rest_framework.exceptions import ValidationError
-from .serializers import UserSerializer
+from rest_framework.exceptions import PermissionDenied
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
+    """
+    A viewset for viewing, editing, and deleting user profiles.
+    Users can only edit or delete their own profile, but can view all profiles.
+    """
     serializer_class = ProfileSerializer
-    queryset = Profile.objects.all()  # This is the base queryset
+    queryset = Profile.objects.all()
+    # Allow GET for all, require auth for others
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        user = self.request.user
+        """
+        Override get_queryset to allow authenticated users to see all profiles.
+        Unauthenticated users can also see all profiles (due to IsAuthenticatedOrReadOnly).
+        """
+        return Profile.objects.all()
 
-        # Check if the user is authenticated
-        if user.is_authenticated:
-            return self.queryset.filter(user=user)
-        else:
-            # Optionally return an empty queryset or raise an error
-            return Profile.objects.none()  # Return an empty queryset
+    def get_object(self):
+        """
+        Override get_object to only allow authenticated users to retrieve,
+        update, or delete their own profile instance.
+        """
+        obj = super().get_object()
+        if self.request.method in ['PUT', 'PATCH', 'DELETE']:
+            if obj.user != self.request.user:
+                raise PermissionDenied(
+                    "You do not have permission to edit or delete this profile.")
+        return obj
 
-    # def list(self, request, *args, **kwargs):
-    #     # override the list method to handle the unauthorized case
-    #     if not request.user.is_authenticated:
-    #         return Response({'error': 'Authentication required.'}, status=status.HTTP_401_UNAUTHORIZED)
+    def perform_update(self, serializer):
+        """
+        Ensure the logged-in user is the owner of the profile being updated.
+        """
+        if serializer.instance.user != self.request.user:
+            raise PermissionDenied(
+                "You do not have permission to update this profile.")
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        """
+        Ensure the logged-in user is the owner of the profile being deleted.
+        """
+        if instance.user != self.request.user:
+            raise PermissionDenied(
+                "You do not have permission to delete this profile.")
+        instance.delete()
+
+    def perform_create(self, serializer):
+        """
+        Automatically link the profile to the logged-in user.
+        """
+        serializer.save(user=self.request.user)
 
 
 class TaskViewSet(viewsets.ModelViewSet):
     """
     A viewset for viewing and editing Task instances.
+    Users can only edit their own assigned tasks.
     """
-    queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    # permission_classes = [IsAuthenticated]
-    # Enable token authentication
-    # authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        """
+        Override get_queryset to filter tasks based on the logged-in user.
+        Users can only see tasks where they are assigned.
+        """
+        user = self.request.user
+        return Task.objects.filter(assigned_users=user)
+
+    def perform_update(self, serializer):
+        """
+        Override perform_update to ensure the logged-in user is assigned to the task.
+        """
+        task = self.get_object()
+        if self.request.user not in task.assigned_users.all():
+            raise PermissionDenied(
+                "You do not have permission to edit this task.")
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        """
+        Override perform_destroy to ensure the logged-in user is assigned to the task.
+        """
+        if self.request.user not in instance.assigned_users.all():
+            raise PermissionDenied(
+                "You do not have permission to delete this task.")
+        instance.delete()
 
     def perform_create(self, serializer):
-        serializer.save()
+        """
+        Automatically assign the logged-in user to the created task.
+        """
+        serializer.save(assigned_users=[self.request.user])
 
 
 class UsersListAPIView(views.APIView):
+    """
+    A view to list all users (profiles are viewed through the ProfileViewSet).
+    Requires authentication.
+    """
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get(self, request):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
@@ -67,7 +128,7 @@ class RegisterViewSet(generics.CreateAPIView):
         return Response({'message': 'User registered successfully'}, status=status.HTTP_201_CREATED)
 
 
-class LoginViewSet(APIView):
+class LoginViewSet(views.APIView):
     """
     Handles user login.
     """
