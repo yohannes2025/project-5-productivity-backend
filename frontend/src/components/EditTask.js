@@ -36,7 +36,7 @@ const EditTask = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [setSuccessMessage] = useState("");
 
   useEffect(() => {
     const fetchTaskAndUsers = async () => {
