@@ -16,4 +16,4 @@ os.environ['API_TOKEN'] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBl
 
 os.environ['ALLOWED_HOST'] = "127.0.0.1"
 
-os.environ['CLIENT_ORIGIN'] = "http://127.0.0.1"
+os.environ['CLIENT_ORIGIN'] = "http://127.0.0.1:3000"
