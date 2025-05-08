@@ -37,9 +37,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'DEBUG' in os.environ
+DEBUG = DEBUG = 'DEV' in os.environ
 
-ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'), 'localhost',]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1',
+                 'project-5-productivity-backend-1b67e4c3722a.herokuapp.com']
 
 
 # Application definition
@@ -73,13 +74,19 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
+CORS_ALLOWED_ORIGINS = [os.environ.get('CLIENT_ORIGIN')]
 CORS_ALLOWED_ORIGINS = [
-    config('CLIENT_ORIGIN', default='http://localhost:3000')]
+    origin for origin in [
+        os.environ.get('CLIENT_ORIGIN'),
+        os.environ.get('CLIENT_ORIGIN_DEV')
+    ] if origin
+]
 
-ALLOWED_HOSTS = os.environ.get(
-    'ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",  # Your React app
+# ]
 
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_CREDENTIALS = True
 
 JWT_AUTH_COOKIE = 'my-app-auth'
 JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'

@@ -9,14 +9,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from .models import Task, Profile
 from .serializers import TaskSerializer, ProfileSerializer, RegisterSerializer, LoginSerializer, UserSerializer
-from django.http import JsonResponse
-from .utils import fetch_external_api_data
-
-
-def get_data_view(request):
-    data = fetch_external_api_data()
-    return JsonResponse(data)
-
 
 # Get the active User model
 User = get_user_model()
