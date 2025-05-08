@@ -13,3 +13,7 @@ os.environ['DEBUG'] = '1'
 
 # os.environ['SECRET_KEY'] = "+I1z*`08P|2XG6H.^QaAPrA"v#0l4CN|p}^#%fHeP9r_Euf7C)`?Pm[T:1c"%6j"
 os.environ['API_TOKEN'] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2NzAzNDc3LCJpYXQiOjE3NDY3MDMxNzcsImp..."
+
+os.environ['ALLOWED_HOST'] = "127.0.0.1"
+
+os.environ['CLIENT_ORIGIN'] = "http://127.0.0.1"
