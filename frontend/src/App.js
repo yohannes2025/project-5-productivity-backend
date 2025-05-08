@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import CreateTask from "./components/CreateTask"; // CreateTaskPage uses it internally
 import EditTask from "./components/EditTask";
 import TaskList from "./components/TaskList";
 import HomePage from "./components/HomePage";
