@@ -36,10 +36,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'DEV' in os.environ
+DEBUG = DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1',
-                 'productivity_app.herokuapp.com']
+                 'project-5-productivity-backend-1b67e4c3722a.herokuapp.com']
 
 
 # Application definition
@@ -79,6 +79,10 @@ CORS_ALLOWED_ORIGINS = [
         os.environ.get('CLIENT_ORIGIN_DEV')
     ] if origin
 ]
+
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",  # Your React app
+# ]
 
 CORS_ALLOW_CREDENTIALS = True
 
