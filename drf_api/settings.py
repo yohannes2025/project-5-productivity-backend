@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+from decouple import config
 
 if os.path.exists('env.py'):
     import env
@@ -36,10 +37,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = DEBUG = 'DEV' in os.environ
+DEBUG = 'DEBUG' in os.environ
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1',
-                 'project-5-productivity-backend-1b67e4c3722a.herokuapp.com']
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST'), 'localhost',]
 
 
 # Application definition
@@ -74,15 +74,10 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    origin for origin in [
-        os.environ.get('CLIENT_ORIGIN'),
-        os.environ.get('CLIENT_ORIGIN_DEV')
-    ] if origin
-]
+    config('CLIENT_ORIGIN', default='http://localhost:3000')]
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",  # Your React app
-# ]
+ALLOWED_HOSTS = os.environ.get(
+    'ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -113,6 +108,13 @@ WSGI_APPLICATION = 'drf_api.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 if 'DEV' in os.environ:
     DATABASES = {
@@ -173,6 +175,12 @@ WHITENOISE_ROOT = BASE_DIR / 'staticfiles' / 'build'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
+
 ASGI_APPLICATION = 'drf_api.asgi.application'
 
 CHANNEL_LAYERS = {
@@ -183,7 +191,6 @@ CHANNEL_LAYERS = {
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_FILTER_BACKENDS': [
@@ -192,6 +199,11 @@ REST_FRAMEWORK = {
         'rest_framework.filters.OrderingFilter',
     ]
 }
+
+AUTHENTICATION_BACKENDS = [
+    'productivity_app.auth.backends.EmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 AUTHENTICATION_BACKENDS = [
     'productivity_app.auth.backends.CustomAuthBackend',
