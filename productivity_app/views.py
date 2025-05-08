@@ -10,7 +10,6 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from .models import Task, Profile
 from .serializers import TaskSerializer, ProfileSerializer, RegisterSerializer, LoginSerializer, UserSerializer
 
-
 # Get the active User model
 User = get_user_model()
 
