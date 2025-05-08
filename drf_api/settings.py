@@ -80,9 +80,9 @@ CORS_ALLOWED_ORIGINS = [
     ] if origin
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Your React app
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",  # Your React app
+# ]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -113,13 +113,6 @@ WSGI_APPLICATION = 'drf_api.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 if 'DEV' in os.environ:
     DATABASES = {
@@ -180,12 +173,6 @@ WHITENOISE_ROOT = BASE_DIR / 'staticfiles' / 'build'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework.authentication.TokenAuthentication',
-#     ),
-# }
-
 ASGI_APPLICATION = 'drf_api.asgi.application'
 
 CHANNEL_LAYERS = {
@@ -205,11 +192,6 @@ REST_FRAMEWORK = {
         'rest_framework.filters.OrderingFilter',
     ]
 }
-
-AUTHENTICATION_BACKENDS = [
-    'productivity_app.auth.backends.EmailBackend',
-    'django.contrib.auth.backends.ModelBackend',
-]
 
 AUTHENTICATION_BACKENDS = [
     'productivity_app.auth.backends.CustomAuthBackend',
