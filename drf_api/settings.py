@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-# import dj_database_url
+import dj_database_url
 # from decouple import config
 
 if os.path.exists('env.py'):
@@ -38,6 +38,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'DEBUG' in os.environ
+
 
 ALLOWED_HOSTS = [
     os.environ.get('ALLOWED_HOST'),
@@ -80,12 +81,6 @@ CORS_ALLOWED_ORIGINS = [os.environ.get('CLIENT_ORIGIN'),
                         "http://localhost:3000"]
 
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",  # Your React app
-# ]
-
-# CORS_ALLOW_CREDENTIALS = True
-
 JWT_AUTH_COOKIE = 'my-app-auth'
 JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'
 JWT_AUTH_SAMESITE = 'None'
@@ -110,17 +105,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'drf_api.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
+if 'DEV' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+    }
+    print("connected to database")
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -193,12 +189,8 @@ REST_FRAMEWORK = {
     ]
 }
 
-AUTHENTICATION_BACKENDS = [
-    'productivity_app.auth.backends.EmailBackend',
-    'django.contrib.auth.backends.ModelBackend',
-]
 
 AUTHENTICATION_BACKENDS = [
     'productivity_app.auth.backends.CustomAuthBackend',
-    'django.contrib.auth.backends.ModelBackend',  # fallback
+    'django.contrib.auth.backends.ModelBackend',
 ]
