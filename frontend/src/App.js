@@ -13,6 +13,7 @@ import TaskList from "./components/TaskList";
 import HomePage from "./components/HomePage";
 import "react-datepicker/dist/react-datepicker.css";
 import CreateTaskPage from "./components/CreateTaskPage"; // a wrapper/page component
+import NoFound from "./components/NotFound";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -96,6 +97,7 @@ function App() {
             path="/tasklist"
             element={isLoggedIn ? <TaskList /> : <Navigate to="/login" />}
           />
+          <Route path="/nofourn" element={<NoFound />} />
         </Routes>
       </Container>
     </div>
