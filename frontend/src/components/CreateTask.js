@@ -6,6 +6,7 @@ import { Container, Card, Form, Button, Alert, Spinner } from "react-bootstrap";
 import styles from "../styles/Common.module.css";
 import clsx from "clsx";
 import api from "../services/api";
+import PropTypes from "prop-types";
 
 const CreateTask = ({ onSubmit, onCancel }) => {
   const [title, setTitle] = useState("");
