@@ -63,10 +63,17 @@ INSTALLED_APPS = [
     'rest_framework',
     'channels',
     'django_filters',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -74,7 +81,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 CORS_ALLOWED_ORIGINS = [os.environ.get('CLIENT_ORIGIN'),
@@ -193,4 +200,5 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = [
     'productivity_app.auth.backends.CustomAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
