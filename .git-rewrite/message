@@ -1,0 +1,5 @@
+Set up project with initial configurations:
+- Install packages: Django, Cloudinary, Pillow
+- Create new project
+- Create env.py file to store Cloudinary URL value
+- Update settings.py: add Cloudinary to INSTALLED_APPS and configure storage

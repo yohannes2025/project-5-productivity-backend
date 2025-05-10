@@ -1,0 +1,10 @@
+tree ee7c9213bbe4cc7b2812b8fa958d0f1886ef2f03
+parent 067cd6939425324d36b605a5069aba532687cb80
+author yohannes2025 <johannes.m.tekle@gmail.com> 1745077382 +0200
+committer yohannes2025 <johannes.m.tekle@gmail.com> 1745077382 +0200
+
+Set up project with initial configurations:
+- Install packages: Django, Cloudinary, Pillow
+- Create new project
+- Create env.py file to store Cloudinary URL value
+- Update settings.py: add Cloudinary to INSTALLED_APPS and configure storage
