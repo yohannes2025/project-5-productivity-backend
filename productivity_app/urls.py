@@ -1,15 +1,18 @@
 # productivity_app/urls.py
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import LoginViewSet, TaskViewSet, ProfileViewSet, RegisterViewSet, UsersListAPIView
+from .views import LoginViewSet, TaskViewSet, ProfileViewSet, RegisterViewSet, UsersListAPIView, root_view
+from django.views.generic import RedirectView
 
 router = DefaultRouter()
 router.register(r'tasks', TaskViewSet, basename='task')
 router.register(r'profiles', ProfileViewSet, basename='profile')
 
 urlpatterns = [
+    path('', root_view, name='root'),
     path('api/register/', RegisterViewSet.as_view(), name='register'),
     path('api/login/', LoginViewSet.as_view(), name='login'),
     path('api/', include(router.urls)),
     path('api/users/', UsersListAPIView.as_view(), name='users-list'),
+    path('favicon.ico', RedirectView.as_view(url='/static/favicon.ico')),
 ]

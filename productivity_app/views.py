@@ -10,9 +10,14 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from .models import Task, Profile
 from .serializers import TaskSerializer, ProfileSerializer, RegisterSerializer, LoginSerializer, UserSerializer
 from rest_framework import serializers
+from django.http import JsonResponse
 
 # Get the active User model
 User = get_user_model()
+
+
+def root_view(request):
+    return JsonResponse({"message": "API Root"}, status=200)
 
 # ==========================
 # Profile ViewSet
