@@ -20,9 +20,9 @@ if os.path.exists('env.py'):
     import env
 
 # Define SIGNUP_FIELDS
-ACCOUNT_SIGNUP_FIELDS = {
-    'username': {'required': True},
+SIGNUP_FIELDS = {
     'email': {'required': True},
+    'password': {'required': True},
 }
 
 CLOUDINARY_STORAGE = {
