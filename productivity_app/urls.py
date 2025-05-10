@@ -8,8 +8,8 @@ router.register(r'tasks', TaskViewSet, basename='task')
 router.register(r'profiles', ProfileViewSet, basename='profile')
 
 urlpatterns = [
-    path('api/register/', RegisterViewSet.as_view(), name='register'),
-    path('api/login/', LoginViewSet.as_view(), name='login'),
-    path('api/', include(router.urls)),
-    path('api/users/', UsersListAPIView.as_view(), name='users-list'),
+    path('register/', RegisterViewSet.as_view(), name='register'),
+    path('login/', LoginViewSet.as_view(), name='login'),
+    path('', include(router.urls)),
+    path('users/', UsersListAPIView.as_view(), name='users-list'),
 ]
