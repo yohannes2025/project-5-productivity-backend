@@ -19,12 +19,6 @@ from allauth.account import app_settings
 if os.path.exists('env.py'):
     import env
 
-# Define SIGNUP_FIELDS
-SIGNUP_FIELDS = {
-    'email': {'required': True},
-    'password': {'required': True},
-}
-
 CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL')
 }
