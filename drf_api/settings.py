@@ -23,6 +23,8 @@ CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL')
 }
 
+SITE_ID = 1
+
 MEDIA_URL = '/media/'
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
@@ -41,10 +43,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = 'DEBUG' in os.environ
 
 
-ALLOWED_HOSTS = [
-    os.environ.get('ALLOWED_HOST'),
-    'localhost',
-]
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1').split(',')
 
 
 # Application definition
