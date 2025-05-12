@@ -14,10 +14,7 @@ from pathlib import Path
 import os
 import dj_database_url
 # from decouple import config
-from allauth.account import app_settings
-
-if os.path.exists('env.py'):
-    import env
+# from allauth.account import app_settings
 
 CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL')
