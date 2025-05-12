@@ -41,7 +41,9 @@ DEBUG = 'DEBUG' in os.environ
 
 
 # ALLOWED_HOSTS = os.environ.get('ALLOWED_HOST', '127.0.0.1').split(',')
-ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS'), 'localhost']
+# ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOSTS'), 'localhost']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1',
+                 'project-5-productivity-backend-1b67e4c3722a.herokuapp.com']
 
 # Application definition
 
@@ -81,7 +83,8 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = [os.environ.get('CLIENT_ORIGIN')]
+CORS_ALLOWED_ORIGINS = [os.environ.get(
+    'CLIENT_ORIGIN'), "http://localhost:3000",]
 
 
 JWT_AUTH_COOKIE = 'my-app-auth'
