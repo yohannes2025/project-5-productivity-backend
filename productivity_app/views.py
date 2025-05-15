@@ -160,6 +160,66 @@ class UsersListAPIView(views.APIView):
 # ==========================
 
 
+# class RegisterViewSet(generics.CreateAPIView):
+#     """
+#     Handles user registration.
+#     """
+#     serializer_class = RegisterSerializer
+
+#     def post(self, request, *args, **kwargs):
+#         """
+#         Handle POST request for user registration.
+#         Uses a transaction to ensure atomicity (user and profile creation).
+#         """
+#         with transaction.atomic():
+#             serializer = self.get_serializer(data=request.data)
+#             serializer.is_valid(raise_exception=True)
+#             # Call perform_create to create the user
+#             user = self.perform_create(serializer)
+
+#             refresh = RefreshToken.for_user(user)
+#             response_data = {
+#                 'message': 'User registered successfully',
+#                 'user_id': user.id,
+#                 'username': user.username,
+#                 'email': user.email,
+#                 'refresh': str(refresh),
+#                 'access': str(refresh.access_token),
+#             }
+#             return Response(response_data, status=status.HTTP_201_CREATED)
+
+#     def perform_create(self, serializer):
+#         """
+#         Custom perform_create to return the created user instance.
+#         """
+#         return serializer.save()
+
+
+# class LoginViewSet(views.APIView):
+#     """
+#     Handles user login and token generation.
+#     """
+
+#     def post(self, request, *args, **kwargs):
+#         """
+#         Handle POST request for user login.
+#         """
+#         serializer = LoginSerializer(
+#             data=request.data, context={'request': request})
+
+#         serializer.is_valid(raise_exception=True)
+
+#         # If valid, the user is in validated_data
+#         user = serializer.validated_data['user']
+
+#         # Generate JWT tokens
+#         refresh = RefreshToken.for_user(user)
+
+#         # Return tokens in the response
+#         return Response({
+#             'access': str(refresh.access_token),
+#             'refresh': str(refresh),
+#         }, status=status.HTTP_200_OK)
 class RegisterViewSet(generics.CreateAPIView):
     """
     Handles user registration.
@@ -167,31 +227,22 @@ class RegisterViewSet(generics.CreateAPIView):
     serializer_class = RegisterSerializer
 
     def post(self, request, *args, **kwargs):
-        """
-        Handle POST request for user registration.
-        Uses a transaction to ensure atomicity (user and profile creation).
-        """
         with transaction.atomic():
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            # Call perform_create to create the user
             user = self.perform_create(serializer)
 
             refresh = RefreshToken.for_user(user)
-            response_data = {
+            return Response({
                 'message': 'User registered successfully',
                 'user_id': user.id,
                 'username': user.username,
                 'email': user.email,
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
-            }
-            return Response(response_data, status=status.HTTP_201_CREATED)
+            }, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
-        """
-        Custom perform_create to return the created user instance.
-        """
         return serializer.save()
 
 
@@ -201,21 +252,13 @@ class LoginViewSet(views.APIView):
     """
 
     def post(self, request, *args, **kwargs):
-        """
-        Handle POST request for user login.
-        """
         serializer = LoginSerializer(
             data=request.data, context={'request': request})
-
         serializer.is_valid(raise_exception=True)
 
-        # If valid, the user is in validated_data
         user = serializer.validated_data['user']
-
-        # Generate JWT tokens
         refresh = RefreshToken.for_user(user)
 
-        # Return tokens in the response
         return Response({
             'access': str(refresh.access_token),
             'refresh': str(refresh),
