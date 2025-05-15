@@ -17,7 +17,7 @@ class Task(models.Model):
     Includes metadata like due date, priority, and optional file attachments.
     """
     # Choices for the 'status' field
-    STATE_CHOICES = [
+    STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('in_progress', 'In Progress'),
         ('done', 'Done'),
@@ -47,7 +47,7 @@ class Task(models.Model):
     )
     status = models.CharField(
         max_length=20,
-        choices=STATE_CHOICES,
+        choices=STATUS_CHOICES,
         default='pending'
     )
     # Many-to-Many relationship with the User model
