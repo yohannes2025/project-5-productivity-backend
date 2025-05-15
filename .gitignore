@@ -174,3 +174,4 @@ cython_debug/
 venv/
 venv
 **node_modules/
+env.py
