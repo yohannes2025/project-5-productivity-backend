@@ -12,4 +12,4 @@ os.environ['DEBUG'] = '1'
 
 os.environ['ALLOWED_HOST'] = "127.0.0.1"
 
-os.environ['CLIENT_ORIGIN'] = "http://127.0.0.1:3000"
+# os.environ['CLIENT_ORIGIN'] = "http://127.0.0.1:3000"

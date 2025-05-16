@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+from corsheaders.defaults import default_headers
 
 if os.path.exists('env.py'):
     import env
@@ -38,9 +39,16 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = DEBUG = 'DEV' in os.environ
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1',
-                 'https://project-5-productivity-frontend.onrender.com',]
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1',
+#                  'project-5-productivity-frontend.onrender.com',]
 #  'project-5-productivity-backend-1b67e4c3722a.herokuapp.com'
+
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'project-5-productivity-backend.onrender.com',
+    'project-5-productivity-frontend.onrender.com',
+]
 
 # Add Render.com URL to allowed hosts
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
@@ -68,30 +76,40 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
+# CORS_ALLOWED_ORIGINS = [
+#     origin for origin in [
+#         os.environ.get('CLIENT_ORIGIN'),  # For deployed frontend
+#         os.environ.get('CLIENT_ORIGIN_DEV'),  # Optional dev origin
+#         "http://localhost:3000",  # Local React dev server
+#     ] if origin
+# ]
+
 CORS_ALLOWED_ORIGINS = [
-    origin for origin in [
-        os.environ.get('CLIENT_ORIGIN'),  # For deployed frontend
-        os.environ.get('CLIENT_ORIGIN_DEV'),  # Optional dev origin
-        "http://localhost:3000",  # Local React dev server
-    ] if origin
+    "https://project-5-productivity-frontend.onrender.com",
+    "http://localhost:3000",
 ]
 
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'access-control-allow-credentials',
+]
+
+CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
 
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:3000",  # for React app
 # ]
 
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_CREDENTIALS = True
 
 JWT_AUTH_COOKIE = 'my-app-auth'
 JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'
@@ -179,7 +197,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 WHITENOISE_ROOT = BASE_DIR / 'staticfiles' / 'build'
 
 # Default primary key field type
@@ -212,11 +230,6 @@ REST_FRAMEWORK = {
         'rest_framework.filters.OrderingFilter',
     ]
 }
-
-AUTHENTICATION_BACKENDS = [
-    'productivity_app.auth.backends.EmailBackend',
-    'django.contrib.auth.backends.ModelBackend',
-]
 
 AUTHENTICATION_BACKENDS = [
     'productivity_app.auth.backends.CustomAuthBackend',
