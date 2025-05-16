@@ -7,6 +7,9 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework import generics, viewsets, views, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from .permissions import IsAssignedOrReadOnly
+from rest_framework import permissions
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 from .models import Task, Profile
 from .serializers import TaskSerializer, ProfileSerializer, RegisterSerializer, LoginSerializer, UserSerializer
 
@@ -87,15 +90,13 @@ class TaskViewSet(viewsets.ModelViewSet):
     """
     serializer_class = TaskSerializer
     # Only authenticated users can interact
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAssignedOrReadOnly]
 
     def get_queryset(self):
-        """
-        Override get_queryset to filter tasks based on the logged-in user.
-        Users can only see tasks where they are assigned.
-        """
         user = self.request.user
-        return Task.objects.filter(assigned_users=user).distinct()
+        if user.is_authenticated:
+            return Task.objects.filter(assigned_users=user).distinct()
+        return Task.objects.all()
 
     def perform_create(self, serializer):
         """
@@ -136,6 +137,28 @@ class TaskViewSet(viewsets.ModelViewSet):
             raise PermissionDenied(
                 "You do not have permission to delete this task.")
         instance.delete()
+
+
+class IsAssignedOrReadOnly(BasePermission):
+    """
+    Custom permission to:
+    - Allow anyone to view (safe methods).
+    - Allow only assigned users to edit/delete.
+    """
+
+    def has_permission(self, request, view):
+        # Allow anyone to read (GET, HEAD, OPTIONS)
+        if request.method in SAFE_METHODS:
+            return True
+        # Other methods require authentication
+        return request.user and request.user.is_authenticated
+
+    def has_object_permission(self, request, view, obj):
+        # Allow read-only access to anyone
+        if request.method in SAFE_METHODS:
+            return True
+        # Write/delete only if user is assigned
+        return request.user in obj.assigned_users.all()
 
 # ==========================
 # User List View
