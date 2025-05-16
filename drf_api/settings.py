@@ -39,7 +39,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1',
-                 'project-5-productivity-backend-1b67e4c3722a.herokuapp.com']
+                 'https://project-5-productivity-frontend.onrender.com',]
+#  'project-5-productivity-backend-1b67e4c3722a.herokuapp.com'
 
 # Add Render.com URL to allowed hosts
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
