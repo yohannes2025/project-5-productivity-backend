@@ -80,14 +80,16 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     origin for origin in [
-        os.environ.get('CLIENT_ORIGIN'),
-        os.environ.get('CLIENT_ORIGIN_DEV')
+        os.environ.get('CLIENT_ORIGIN'),  # For deployed frontend
+        os.environ.get('CLIENT_ORIGIN_DEV'),  # Optional dev origin
+        "http://localhost:3000",  # Local React dev server
     ] if origin
 ]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # for React app
-]
+
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",  # for React app
+# ]
 
 CORS_ALLOW_CREDENTIALS = True
 
