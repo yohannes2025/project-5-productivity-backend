@@ -176,22 +176,52 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 'Email and password are required.', code='authorization')
 
-        # Authenticate the user
-        user = authenticate(request=self.context.get(
-            'request'), username=email, password=password)
+        try:
+            # Find the user with the given email
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            raise serializers.ValidationError(
+                'Invalid credentials.', code='authorization')
+
+        # Authenticate using the user's actual username
+        user = authenticate(username=user.username, password=password)
 
         if not user:
             raise serializers.ValidationError(
                 'Invalid credentials.', code='authorization')
 
-        # Check if the account is active
         if not user.is_active:
             raise serializers.ValidationError(
                 'User account is disabled.', code='authorization')
 
-        # Add the authenticated user to the validated data
         attrs['user'] = user
         return attrs
+
+    # def validate(self, attrs):
+    #     """Custom validation for login credentials."""
+    #     email = attrs.get('email')
+    #     password = attrs.get('password')
+
+    #     if not email or not password:
+    #         raise serializers.ValidationError(
+    #             'Email and password are required.', code='authorization')
+
+    #     # Authenticate the user
+    #     user = authenticate(request=self.context.get(
+    #         'request'), username=email, password=password)
+
+    #     if not user:
+    #         raise serializers.ValidationError(
+    #             'Invalid credentials.', code='authorization')
+
+    #     # Check if the account is active
+    #     if not user.is_active:
+    #         raise serializers.ValidationError(
+    #             'User account is disabled.', code='authorization')
+
+    #     # Add the authenticated user to the validated data
+    #     attrs['user'] = user
+    #     return attrs
 
 # ==========================
 # Profile Serializer
