@@ -7,11 +7,12 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework import generics, viewsets, views, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from .permissions import IsAssignedOrReadOnly
+from .permissions import IsAssignedOrReadOnly, IsSelfOrReadOnly
 from rest_framework import permissions
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 from .models import Task, Profile
 from .serializers import TaskSerializer, ProfileSerializer, RegisterSerializer, LoginSerializer, UserSerializer
+from django.contrib.auth.models import User
 
 
 # Get the active User model
@@ -138,28 +139,6 @@ class TaskViewSet(viewsets.ModelViewSet):
                 "You do not have permission to delete this task.")
         instance.delete()
 
-
-class IsAssignedOrReadOnly(BasePermission):
-    """
-    Custom permission to:
-    - Allow anyone to view (safe methods).
-    - Allow only assigned users to edit/delete.
-    """
-
-    def has_permission(self, request, view):
-        # Allow anyone to read (GET, HEAD, OPTIONS)
-        if request.method in SAFE_METHODS:
-            return True
-        # Other methods require authentication
-        return request.user and request.user.is_authenticated
-
-    def has_object_permission(self, request, view, obj):
-        # Allow read-only access to anyone
-        if request.method in SAFE_METHODS:
-            return True
-        # Write/delete only if user is assigned
-        return request.user in obj.assigned_users.all()
-
 # ==========================
 # User List View
 # ==========================
@@ -177,6 +156,18 @@ class UsersListAPIView(views.APIView):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Allows users to retrieve, update, or delete their own profile.
+    """
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated, IsSelfOrReadOnly]
+
+    def get_object(self):
+        # Return the current authenticated user instance only
+        return self.request.user
 
 # ==========================
 # Authentication Views
