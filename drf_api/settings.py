@@ -99,6 +99,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'access-control-allow-credentials',
 ]
@@ -109,7 +111,11 @@ CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
 #     "http://localhost:3000",  # for React app
 # ]
 
-# CORS_ALLOW_CREDENTIALS = True
+CSRF_TRUSTED_ORIGINS = [
+    "https://project-5-productivity-frontend.onrender.com",
+]
+
+CORS_ALLOW_CREDENTIALS = True
 
 JWT_AUTH_COOKIE = 'my-app-auth'
 JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'
@@ -204,11 +210,6 @@ WHITENOISE_ROOT = BASE_DIR / 'staticfiles' / 'build'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework.authentication.TokenAuthentication',
-#     ),
-# }
 
 ASGI_APPLICATION = 'drf_api.asgi.application'
 
