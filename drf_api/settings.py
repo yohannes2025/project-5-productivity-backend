@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+from re import DEBUG
 import dj_database_url
 from corsheaders.defaults import default_headers
 
@@ -37,7 +38,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = DEBUG = 'DEV' in os.environ
+# DEBUG = DEBUG = 'DEV' in os.environ
+DEBUG = True
 
 # ALLOWED_HOSTS = ['localhost', '127.0.0.1',
 #                  'project-5-productivity-frontend.onrender.com',]
