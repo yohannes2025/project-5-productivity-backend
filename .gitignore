@@ -175,3 +175,4 @@ venv/
 venv
 **node_modules/
 env.py
+.vs/ 
