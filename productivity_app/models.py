@@ -6,9 +6,6 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.utils import timezone
 from django.db import migrations, models
-import DatePicker from "react-datepicker"
-import "react-datepicker/dist/react-datepicker.css"
-
 
 # ==========================
 # Task Management Models
