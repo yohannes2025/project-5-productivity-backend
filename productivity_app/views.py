@@ -1,5 +1,4 @@
 # productivity_app/views.py
-
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
 from django.db import transaction
@@ -105,15 +104,12 @@ class TaskViewSet(viewsets.ModelViewSet):
         If assigned_users data is provided in the request, it will be used.
         If not, the creating user will be the only assignee.
         """
-        # Check if assigned_users was provided in the request data
         assigned_users_data = self.request.data.get('assigned_users')
-
+        task = serializer.save()
         if assigned_users_data is None:
-            # If no assigned_users provided, assign only the creating user
-            serializer.save(assigned_users=[self.request.user])
-        else:
-            # If assigned_users provided, save with the provided data
-            serializer.save()  # The serializer's create method will handle the M2M
+            # Assign creating user if no assigned_users provided
+            task.assigned_users.set([self.request.user])
+        # Else assigned_users set by serializer via validated_data
 
     def perform_update(self, serializer):
         """
@@ -174,66 +170,6 @@ class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 # ==========================
 
 
-# class RegisterViewSet(generics.CreateAPIView):
-#     """
-#     Handles user registration.
-#     """
-#     serializer_class = RegisterSerializer
-
-#     def post(self, request, *args, **kwargs):
-#         """
-#         Handle POST request for user registration.
-#         Uses a transaction to ensure atomicity (user and profile creation).
-#         """
-#         with transaction.atomic():
-#             serializer = self.get_serializer(data=request.data)
-#             serializer.is_valid(raise_exception=True)
-#             # Call perform_create to create the user
-#             user = self.perform_create(serializer)
-
-#             refresh = RefreshToken.for_user(user)
-#             response_data = {
-#                 'message': 'User registered successfully',
-#                 'user_id': user.id,
-#                 'username': user.username,
-#                 'email': user.email,
-#                 'refresh': str(refresh),
-#                 'access': str(refresh.access_token),
-#             }
-#             return Response(response_data, status=status.HTTP_201_CREATED)
-
-#     def perform_create(self, serializer):
-#         """
-#         Custom perform_create to return the created user instance.
-#         """
-#         return serializer.save()
-
-
-# class LoginViewSet(views.APIView):
-#     """
-#     Handles user login and token generation.
-#     """
-
-#     def post(self, request, *args, **kwargs):
-#         """
-#         Handle POST request for user login.
-#         """
-#         serializer = LoginSerializer(
-#             data=request.data, context={'request': request})
-
-#         serializer.is_valid(raise_exception=True)
-
-#         # If valid, the user is in validated_data
-#         user = serializer.validated_data['user']
-
-#         # Generate JWT tokens
-#         refresh = RefreshToken.for_user(user)
-
-#         # Return tokens in the response
-#         return Response({
-#             'access': str(refresh.access_token),
-#             'refresh': str(refresh),
-#         }, status=status.HTTP_200_OK)
 class RegisterViewSet(generics.CreateAPIView):
     """
     Handles user registration.
@@ -241,22 +177,31 @@ class RegisterViewSet(generics.CreateAPIView):
     serializer_class = RegisterSerializer
 
     def post(self, request, *args, **kwargs):
+        """
+        Handle POST request for user registration.
+        Uses a transaction to ensure atomicity (user and profile creation).
+        """
         with transaction.atomic():
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
+            # Call perform_create to create the user
             user = self.perform_create(serializer)
 
             refresh = RefreshToken.for_user(user)
-            return Response({
+            response_data = {
                 'message': 'User registered successfully',
                 'user_id': user.id,
                 'username': user.username,
                 'email': user.email,
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
-            }, status=status.HTTP_201_CREATED)
+            }
+            return Response(response_data, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
+        """
+        Custom perform_create to return the created user instance.
+        """
         return serializer.save()
 
 
@@ -266,13 +211,21 @@ class LoginViewSet(views.APIView):
     """
 
     def post(self, request, *args, **kwargs):
+        """
+        Handle POST request for user login.
+        """
         serializer = LoginSerializer(
             data=request.data, context={'request': request})
+
         serializer.is_valid(raise_exception=True)
 
+        # If valid, the user is in validated_data
         user = serializer.validated_data['user']
+
+        # Generate JWT tokens
         refresh = RefreshToken.for_user(user)
 
+        # Return tokens in the response
         return Response({
             'access': str(refresh.access_token),
             'refresh': str(refresh),
