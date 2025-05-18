@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
-from re import DEBUG
 import dj_database_url
 from corsheaders.defaults import default_headers
 
@@ -38,12 +37,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = DEBUG = 'DEV' in os.environ
-DEBUG = True
-
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1',
-#                  'project-5-productivity-frontend.onrender.com',]
-#  'project-5-productivity-backend-1b67e4c3722a.herokuapp.com'
+DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -88,14 +82,6 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
-# CORS_ALLOWED_ORIGINS = [
-#     origin for origin in [
-#         os.environ.get('CLIENT_ORIGIN'),  # For deployed frontend
-#         os.environ.get('CLIENT_ORIGIN_DEV'),  # Optional dev origin
-#         "http://localhost:3000",  # Local React dev server
-#     ] if origin
-# ]
-
 CORS_ALLOWED_ORIGINS = [
     "https://project-5-productivity-frontend.onrender.com",
     "http://localhost:3000",
@@ -109,9 +95,6 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
 
 CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",  # for React app
-# ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://project-5-productivity-frontend.onrender.com",
@@ -143,16 +126,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'drf_api.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 if 'DEV' in os.environ:
     DATABASES = {
