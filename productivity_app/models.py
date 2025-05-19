@@ -2,9 +2,11 @@
 
 # Importing necessary modules from Django
 from django.db import models
-from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.utils import timezone
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 
 # ==========================
 # Task Management Models
@@ -53,8 +55,8 @@ class Task(models.Model):
     # Many-to-Many relationship with the User model
     assigned_users = models.ManyToManyField(
         User, related_name='assigned_tasks')
-    upload_files = models.FileField(
-        upload_to='task_files', blank=True, null=True)
+    # upload_files = models.FileField(
+    #     upload_to='task_files', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -66,6 +68,17 @@ class Task(models.Model):
     def __str__(self):
         """String representation of the Task model."""
         return self.title
+
+
+class File(models.Model):
+    """Represents a file uploaded for a Task."""
+    task = models.ForeignKey(
+        Task, related_name='upload_files', on_delete=models.CASCADE)
+    file = models.FileField(upload_to='task_files')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.file.name}"
 
 
 class Profile(models.Model):

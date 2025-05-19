@@ -1,7 +1,8 @@
 # productivity_app/serializers.py
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
-from .models import Task, Profile
+from .models import Task, Profile, File
+from django.contrib.auth.password_validation import validate_password
 
 # Get the active User model
 User = get_user_model()
@@ -9,6 +10,21 @@ User = get_user_model()
 # ==========================
 # Task Management Serializers
 # ==========================
+
+
+class FileSerializer(serializers.ModelSerializer):
+    """Serializer for file uploads."""
+
+    class Meta:
+        model = File
+        fields = ['id', 'file']
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """Basic Serializer for the User model."""
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email']
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -19,6 +35,7 @@ class TaskSerializer(serializers.ModelSerializer):
         many=True,
         required=False
     )
+    upload_files = FileSerializer(many=True, read_only=True)
 
     class Meta:
         model = Task
@@ -58,17 +75,6 @@ class TaskSerializer(serializers.ModelSerializer):
         instance.category = validated_data.get('category', instance.category)
         instance.status = validated_data.get('status', instance.status)
 
-        # Handle file upload updates (including clearing the file)
-        if 'upload_files' in validated_data:
-            new_file = validated_data['upload_files']
-            if new_file is None:
-                if instance.upload_files:
-                    instance.upload_files.delete(save=False)
-                instance.upload_files = None
-
-            else:
-                instance.upload_files = new_file
-
         # Update assigned users if the field was provided in the request
         if assigned_users_data is not None:
             instance.assigned_users.set(assigned_users_data)
@@ -78,17 +84,37 @@ class TaskSerializer(serializers.ModelSerializer):
 
         return instance
 
+
+class TaskListSerializer(serializers.ModelSerializer):
+    """Serializer for listing tasks with limited fields."""
+    # Include only the necessary fields for listing
+    class Meta:
+        model = Task
+        fields = ['id', 'title', 'description', 'due_date', 'priority',
+                  'category', 'status', 'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']
+
+
+class TaskDetailSerializer(serializers.ModelSerializer):
+    """Serializer for detailed task view."""
+    assigned_users = UserSerializer(many=True, read_only=True)
+
+    assigned_user_ids = serializers.PrimaryKeyRelatedField(
+        source='assigned_users', queryset=User.objects.all(), many=True, write_only=True)
+
+    upload_files = FileSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Task
+        fields = ['id', 'title', 'description', 'due_date', 'priority',
+                  'category', 'status', 'assigned_users', 'upload_files',
+                  'created_at', 'updated_at']
+        read_only_fields = ['created_at', 'updated_at']
+
+
 # ==========================
 # Authentication & User Serializers
 # ==========================
-
-
-class UserSerializer(serializers.ModelSerializer):
-    """Basic Serializer for the User model."""
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email']
-
 
 class RegisterSerializer(serializers.ModelSerializer):
     """Serializer for user registration."""
@@ -131,16 +157,14 @@ class RegisterSerializer(serializers.ModelSerializer):
         return attrs
 
     def validate_password_strength(self, password):
-        """Validates the strength of the password."""
-        min_length = 8
-
-        if len(password) < min_length:
-            raise serializers.ValidationError(
-                {"password": f"Password must be at least {min_length} characters long."})
+        try:
+            validate_password(password)
+        except serializers.ValidationError as e:
+            raise serializers.ValidationError({'password': list(e.messages)})
 
     def create(self, validated_data):
         """Custom create method to handle user and profile creation."""
-        confirm_password = validated_data.pop('confirm_password')
+        validated_data.pop('confirm_password', None)
         name = validated_data.pop('name')  # Get the name for username/profile
 
         # Create the User instance using create_user (handles password hashing)
@@ -156,7 +180,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             profile.name = name
             profile.save()
         except Profile.DoesNotExist:
-            pass  # Should not happen if signal is configured
+            Profile.objects.create(user=user, name=name,
+                                   email=validated_data['email'])
 
         return user
 
@@ -176,8 +201,12 @@ class LoginSerializer(serializers.Serializer):
                 'Email and password are required.', code='authorization')
 
         # Authenticate the user
-        user = authenticate(request=self.context.get(
-            'request'), username=email, password=password)
+        try:
+            user = User.objects.get(email=email)
+
+        except User.DoesNotExist:
+            raise serializers.ValidationError(
+                'Invalid credentials.', code='authorization')
 
         if not user:
             raise serializers.ValidationError(
@@ -211,8 +240,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         # Displays limited user/profile data
         if instance.user:
             return {
-                'id': instance.user.id,  # User ID
-                'Name': instance.name,  # Profile name
-                'Email': instance.user.email,  # User email
+                'id': instance.user.id,
+                'name': instance.name,
+                'email': instance.user.email,
             }
-        return {}  # Handle cases with no linked user
+        return {}

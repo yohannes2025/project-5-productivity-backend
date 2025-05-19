@@ -1,17 +1,28 @@
 # productivity_app/views.py
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth import get_user_model
-from django.db import transaction
-from rest_framework.exceptions import PermissionDenied
+
+# Third-party imports
 from rest_framework import generics, viewsets, views, status
-from rest_framework.response import Response
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from .permissions import IsAssignedOrReadOnly, IsSelfOrReadOnly
-from rest_framework import permissions
-from rest_framework.permissions import BasePermission, SAFE_METHODS
-from .models import Task, Profile
-from .serializers import TaskSerializer, ProfileSerializer, RegisterSerializer, LoginSerializer, UserSerializer
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
+
+# Django imports
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.db import transaction
+
+# Local application imports
+from .models import Profile, Task
+from .permissions import IsAssignedOrReadOnly, IsSelfOrReadOnly
+from .serializers import (
+    TaskSerializer,
+    ProfileSerializer,
+    RegisterSerializer,
+    LoginSerializer,
+    UserSerializer
+)
 
 
 # Get the active User model
@@ -91,6 +102,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     # Only authenticated users can interact
     permission_classes = [IsAssignedOrReadOnly]
+    parser_classes = (MultiPartParser, FormParser)
 
     def get_queryset(self):
         user = self.request.user
@@ -101,15 +113,11 @@ class TaskViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         """
         Automatically assign the logged-in user to the created task.
-        If assigned_users data is provided in the request, it will be used.
-        If not, the creating user will be the only assignee.
+        If assigned_users are not provided in the request, assign the creating user.
         """
-        assigned_users_data = self.request.data.get('assigned_users')
         task = serializer.save()
-        if assigned_users_data is None:
-            # Assign creating user if no assigned_users provided
+        if not task.assigned_users.exists():
             task.assigned_users.set([self.request.user])
-        # Else assigned_users set by serializer via validated_data
 
     def perform_update(self, serializer):
         """
