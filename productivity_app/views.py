@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import permissions
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 # Django imports
 from django.contrib.auth import get_user_model
@@ -103,7 +104,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     # Only authenticated users can interact
     permission_classes = [IsAssignedOrReadOnly]
-    parser_classes = (MultiPartParser, FormParser)
+    parser_classes = (JSONParser, MultiPartParser, FormParser)
 
     def get_queryset(self):
         user = self.request.user
