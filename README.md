@@ -1,4 +1,6 @@
-# 📅 Productivity App Project
+# 📅 Productivity App Project Backend
+
+![productivity_app](./staticfiles/build/static/images/productivity_app.png)
 
 ## Table of contents
 
