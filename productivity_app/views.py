@@ -42,73 +42,30 @@ User = get_user_model()
 class ProfileViewSet(viewsets.ModelViewSet):
     """
     A viewset for viewing and editing user profiles.
-    Users can view all profiles, but can only edit or delete their own profile.
-    Profile creation is handled during user registration via a signal.
+    Public can view all profiles. Authenticated users can edit/delete only their own profile.
     """
     serializer_class = ProfileSerializer
-    queryset = Profile.objects.all()  # Base queryset for lookup
-    # Allow GET for all, require auth for others (PUT, PATCH, DELETE)
+    queryset = Profile.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        """
-        Override get_queryset to allow authenticated users to see all profiles.
-        Unauthenticated users can also see all profiles
-        (due to IsAuthenticatedOrReadOnly).
-        """
-        return Profile.objects.all()  # Return the base queryset
+        return Profile.objects.all()
 
     def get_object(self):
-        """
-        Override get_object to only allow authenticated users to retrieve,
-        update, or delete their own profile instance.
-        For retrieve (GET), it allows access if authorized by
-        permission_classes.
-        For update/delete (PUT, PATCH, DELETE), it enforces ownership.
-        """
         obj = super().get_object()
-        # Check ownership for update/delete methods
         if self.request.method in ['PUT', 'PATCH', 'DELETE']:
-            # Ensure user is authenticated before checking ownership
-            if (
-                self.request.user.is_authenticated and
-                obj.user != self.request.user
-            ):
-                raise PermissionDenied(
-                    "You do not have permission"
-                    "to edit or delete this profile."
-                )
-
-            return obj
+            if self.request.user != obj.user:
+                raise PermissionDenied("You can only modify your own profile.")
+        return obj
 
     def perform_update(self, serializer):
-        """
-        Ensure the logged-in user is the owner of the profile being updated.
-        """
-
-        if (
-                self.request.user.is_authenticated and
-                serializer.instance.user != self.request.user
-        ):
-            raise PermissionDenied(
-                "You do not have permission to update this profile.")
+        if self.request.user != serializer.instance.user:
+            raise PermissionDenied("You can only update your own profile.")
         serializer.save()
 
     def perform_destroy(self, instance):
-        """
-        Ensure the logged-in user is the owner of the profile being deleted.
-        Note: Deleting a profile might implicitly delete the user depending on
-        the ForeignKey configuration (on_delete=CASCADE). Consider if this is
-        the desired behavior.
-        """
-        if (
-            self.request.user.is_authenticated
-            and instance.user != self.request.user
-        ):
-            raise PermissionDenied(
-                "You do not have permission to delete this profile."
-            )
-
+        if self.request.user != instance.user:
+            raise PermissionDenied("You can only delete your own profile.")
         instance.delete()
 
 # ==========================
