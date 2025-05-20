@@ -42,7 +42,8 @@ User = get_user_model()
 class ProfileViewSet(viewsets.ModelViewSet):
     """
     A viewset for viewing and editing user profiles.
-    Public can view all profiles. Authenticated users can edit/delete only their own profile.
+    Public can view all profiles. Authenticated users
+    can edit/delete only their own profile.
     """
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
