@@ -30,3 +30,15 @@ class IsSelfOrReadOnly(BasePermission):
         if request.method in SAFE_METHODS:
             return True
         return obj == request.user
+
+
+class IsOwnerOrReadOnly(BasePermission):
+    """
+    Allows users to edit/delete only their own related objects 
+    (e.g., profiles).
+    """
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in SAFE_METHODS:
+            return True
+        return obj.user == request.user
