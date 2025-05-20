@@ -1,4 +1,5 @@
 # productivity_app/serializers.py
+from django.contrib.auth import get_user_model
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers
 from .models import Task, Profile, File
@@ -186,6 +187,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
+User = get_user_model()
+
+
 class LoginSerializer(serializers.Serializer):
     """Serializer for user login."""
     email = serializers.EmailField()  # login is by email
@@ -200,26 +204,24 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 'Email and password are required.', code='authorization')
 
-        # Authenticate the user
         try:
             user = User.objects.get(email=email)
-
         except User.DoesNotExist:
             raise serializers.ValidationError(
                 'Invalid credentials.', code='authorization')
 
-        if not user:
+        # CHECK PASSWORD HERE
+        if not user.check_password(password):
             raise serializers.ValidationError(
                 'Invalid credentials.', code='authorization')
 
-        # Check if the account is active
         if not user.is_active:
             raise serializers.ValidationError(
                 'User account is disabled.', code='authorization')
 
-        # Add the authenticated user to the validated data
         attrs['user'] = user
         return attrs
+
 
 # ==========================
 # Profile Serializer
