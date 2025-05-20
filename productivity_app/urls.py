@@ -38,7 +38,10 @@ urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view(),
          name='token_verify'),
 
+    # viewsets
     path('api/', include(router.urls)),
+
+    # User list and detail endpoints
     path('api/users/', UsersListAPIView.as_view(), name='users-list'),
-    path('users/<int:pk>/', UserDetailAPIView.as_view(), name='user-detail'),
+    path('api/users/me/', UserDetailAPIView.as_view(), name='user-detail'),
 ]
