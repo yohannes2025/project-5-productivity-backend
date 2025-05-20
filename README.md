@@ -2,6 +2,11 @@
 
 ![productivity_app](./staticfiles/build/static/images/productivity_app.png)
 
+The **Productivity App** project focuses on developing a **calendar-driven application** designed to help users organize their time efficiently. This **browser-based platform** allows users to create and manage **tasks and habits** effectively.
+This application is built to ensure a **seamless user experience** in maintaining daily productivity through a clean, intuitive interface and smart task organization tools.
+
+[View the website here](https://project-5-productivity-frontend.onrender.com/)
+
 ## Table of contents
 
 * [Project goals](#project-goals)
