@@ -2,6 +2,11 @@
 
 ![productivity_app](./staticfiles/build/static/images/productivity_app.png)
 
+The **Productivity App** project focuses on developing a **calendar-driven application** designed to help users organize their time efficiently. This **browser-based platform** allows users to create and manage **tasks and habits** effectively.
+This application is built to ensure a **seamless user experience** in maintaining daily productivity through a clean, intuitive interface and smart task organization tools.
+
+[View the website here](https://project-5-productivity-frontend.onrender.com/)
+
 ## Table of contents
 
 * [Project goals](#project-goals)
@@ -204,45 +209,188 @@ Productivity App is configured to allow requests from all origins, to facilitate
 
 ## Deployment
 
-### Heroku
+#  Deploying a Django REST Framework Backend to Render.com
 
-The Productivity API is deployed to Heroku, using PostgreSql database.
-To duplicate deployment to Heroku, follow these steps:
+## Prerequisites
 
-- Description of the deployment process using Heroku.
-- Fork or clone this repository in GitHub.
-- You will need a Cloudinary account to host user profile images.
-- Login to Cloudinary.
-- Select the 'dashboard' option.
-- Copy the value of the 'API Environment variable' from the part starting `cloudinary://` to the end. You may need to select the eye icon to view the full environment variable. Paste this value somewhere for safe keeping as you will need it shortly (but destroy after deployment).
-- Log in to Heroku.
-- Select 'Create new app' from the 'New' menu at the top right.
-- Enter a name for the app and select the appropriate region.
-- Select 'Create app'.
-- Select 'Settings' from the menu at the top.
-- Login to ElephantSQL.
-- Click 'Create new instance' on the dashboard.
-- Name the 'plan' and select the 'Tiny Turtle (free)' plan.
-- Select 'select region'.
-- Choose the nearest data centre to your location.
-- Click 'Review'.
-- Go to the ElephantSQL dashboard and click on the 'database instance name' for this project.
-- Copy the ElephantSQL database URL to your clipboard (this starts with `postgres://`).
-- Return to the Heroku dashboard.
-- Select the 'settings' tab.
-- Locate the 'reveal config vars' link and select.
-- Enter the following config var names and values:
-    - `CLOUDINARY_URL`: *your cloudinary URL as obtained above*
-    - `DATABASE_URL`: *your ElephantSQL postgres database URL as obtained above*
-    - `SECRET_KEY`: *your secret key*
-    - `ALLOWED_HOST`: *the url of your Heroku app (but without the `https://` prefix)*
-- Select the 'Deploy' tab at the top.
-- Select 'GitHub' from the deployment options and confirm you wish to deploy using GitHub. You may be asked to enter your GitHub password.
-- Find the 'Connect to GitHub' section and use the search box to locate your repo.
-- Select 'Connect' when found.
-- Optionally choose the main branch under 'Automatic Deploys' and select 'Enable Automatic Deploys' if you wish your deployed API to be automatically redeployed every time you push changes to GitHub.
-- Find the 'Manual Deploy' section, choose 'main' as the branch to deploy and select 'Deploy Branch'.
-- Your API will shortly be deployed and you will be given a link to the deployed site when the process is complete.
+Before deploying, ensure:
+
+* You have a working **Django REST Framework (DRF)** project.
+* Your project is on **GitHub** or **GitLab**.
+* You have a `requirements.txt` file.
+* Your project uses a virtual environment.
+* You’ve created a free account on [Render](https://render.com/).
+
+---
+
+## Step 1: Prepare Your Django Project for Deployment
+
+### 1.1. Create `requirements.txt`
+
+```bash
+pip freeze > requirements.txt
+```
+
+### 1.2. Install Gunicorn
+
+```bash
+pip install gunicorn
+```
+
+Make sure `gunicorn` is added to your `requirements.txt`.
+
+---
+
+### 1.3. (Optional) Create a `render.yaml` for Infrastructure as Code
+
+```yaml
+services:
+  - type: web
+    name: drf-api
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn your_project_name.wsgi:application"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: your_project_name.settings
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: false
+```
+
+> Replace `your_project_name` with the name of your Django project directory.
+
+---
+
+### 1.4. Update `settings.py` for Production
+
+#### Add Allowed Hosts:
+
+```python
+ALLOWED_HOSTS = ['your-service-name.onrender.com']
+```
+
+#### Add Static File Config:
+
+```python
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+```
+
+---
+
+### 1.5. Collect Static Files
+
+```bash
+python manage.py collectstatic
+```
+
+---
+
+##  Step 2: Push Your Code to GitHub
+
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/yourusername/your-repo.git
+git push -u origin main
+```
+
+---
+
+##  Step 3: Deploy to Render
+
+1. Go to [Render.com](https://render.com/) and log in.
+2. Click **“New +” → “Web Service”**.
+3. Connect your GitHub repository.
+4. Fill out deployment settings:
+
+| Field         | Value                                         |
+| ------------- | --------------------------------------------- |
+| Name          | drf-api (or any name)                         |
+| Environment   | Python                                        |
+| Build Command | `pip install -r requirements.txt`             |
+| Start Command | `gunicorn your_project_name.wsgi:application` |
+
+5. Add the following environment variables:
+
+```
+DJANGO_SETTINGS_MODULE = your_project_name.settings
+SECRET_KEY = your-secret-key
+DEBUG = false
+```
+
+---
+
+##  Step 4: (Optional) Add a PostgreSQL Database on Render
+
+1. Go to **“New +” → “PostgreSQL”** in Render.
+2. Name it and choose a free plan.
+3. Copy the **Internal Database URL**.
+4. Update `settings.py`:
+
+```python
+import dj_database_url
+
+DATABASES = {
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+}
+```
+
+Install `dj-database-url`:
+
+```bash
+pip install dj-database-url
+```
+
+---
+
+##  Step 5: Apply Migrations and Collect Static Files on Render
+
+Use the **Shell** in the Render dashboard:
+
+```bash
+python manage.py migrate
+python manage.py collectstatic --noinput
+```
+
+---
+
+## Step 6: Access Your Live API
+
+Visit:
+
+```
+https://your-service-name.onrender.com/
+```
+
+Make sure your API routes (e.g. `/api/`) are configured in `urls.py`.
+
+---
+
+## ✅ Final Deployment Checklist
+
+| Task                             | Status |
+| -------------------------------- | ------ |
+| Code pushed to GitHub            | ✅      |
+| `gunicorn` installed             | ✅      |
+| Static files configured          | ✅      |
+| `DEBUG=False` in production      | ✅      |
+| `SECRET_KEY` in environment vars | ✅      |
+| PostgreSQL set up (optional)     | ✅      |
+| Migrations applied               | ✅      |
+| API tested live                  | ✅      |
+
+---
+
+##  References
+
+* [Render.com Docs](https://render.com/docs)
+* [Django Deployment Checklist](https://docs.djangoproject.com/en/stable/howto/deployment/checklist/)
+
 
 ## Testing
 
