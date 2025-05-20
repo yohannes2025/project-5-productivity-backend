@@ -30,7 +30,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(serializers.ModelSerializer):
     """Serializer for the Task model."""
-    # Field to handle the Many-to-Many relationship with User for assigned users
+    # Field to handle the Many-to-Many relationship with User
+    # for assigned users
     assigned_users = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all(),
         many=True,
@@ -101,7 +102,11 @@ class TaskDetailSerializer(serializers.ModelSerializer):
     assigned_users = UserSerializer(many=True, read_only=True)
 
     assigned_user_ids = serializers.PrimaryKeyRelatedField(
-        source='assigned_users', queryset=User.objects.all(), many=True, write_only=True)
+        source='assigned_users',
+        queryset=User.objects.all(),
+        many=True,
+        write_only=True,
+    )
 
     upload_files = FileSerializer(many=True, read_only=True)
 
@@ -145,15 +150,23 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         # Check if username (derived from name) is already taken
         username_to_check = attrs.get('name')
-        if username_to_check and User.objects.filter(username=username_to_check).exists():
-            raise serializers.ValidationError(
-                {"name": "A user with this username already exists."})
+        if (
+            username_to_check and
+            User.objects.filter(username=username_to_check).exists()
+        ):
+            raise serializers.ValidationError({
+                "name": "A user with this username already exists."
+            })
 
         # Check if email is already registered
         email_to_check = attrs.get('email')
-        if email_to_check and User.objects.filter(email=email_to_check).exists():
-            raise serializers.ValidationError(
-                {"email": "A user with this email address already exists."})
+        if (
+            email_to_check and
+            User.objects.filter(email=email_to_check).exists()
+        ):
+            raise serializers.ValidationError({
+                "email": "A user with this email address already exists."
+            })
 
         return attrs
 

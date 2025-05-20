@@ -5,7 +5,9 @@ from rest_framework.permissions import BasePermission, SAFE_METHODS
 class IsAssignedOrReadOnly(BasePermission):
     """
     Allows read-only access to anyone.
-    Allows modification only if the user is authenticated and assigned to the task.
+    Allows modification only if the user is authenticated
+
+    and assigned to the task.
     """
 
     def has_permission(self, request, view):

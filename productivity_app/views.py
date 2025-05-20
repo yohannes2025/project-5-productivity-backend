@@ -4,7 +4,11 @@
 from rest_framework import generics, viewsets, views, status
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import (
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+)
+
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import permissions
@@ -49,7 +53,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """
         Override get_queryset to allow authenticated users to see all profiles.
-        Unauthenticated users can also see all profiles (due to IsAuthenticatedOrReadOnly).
+        Unauthenticated users can also see all profiles
+        (due to IsAuthenticatedOrReadOnly).
         """
         return Profile.objects.all()  # Return the base queryset
 
@@ -57,24 +62,34 @@ class ProfileViewSet(viewsets.ModelViewSet):
         """
         Override get_object to only allow authenticated users to retrieve,
         update, or delete their own profile instance.
-        For retrieve (GET), it allows access if authorized by permission_classes.
+        For retrieve (GET), it allows access if authorized by
+        permission_classes.
         For update/delete (PUT, PATCH, DELETE), it enforces ownership.
         """
         obj = super().get_object()
         # Check ownership for update/delete methods
         if self.request.method in ['PUT', 'PATCH', 'DELETE']:
             # Ensure user is authenticated before checking ownership
-            if self.request.user.is_authenticated and obj.user != self.request.user:
+            if (
+                self.request.user.is_authenticated and
+                obj.user != self.request.user
+            ):
                 raise PermissionDenied(
-                    "You do not have permission to edit or delete this profile.")
-        return obj
+                    "You do not have permission"
+                    "to edit or delete this profile."
+                )
+
+            return obj
 
     def perform_update(self, serializer):
         """
         Ensure the logged-in user is the owner of the profile being updated.
         """
 
-        if self.request.user.is_authenticated and serializer.instance.user != self.request.user:
+        if (
+                self.request.user.is_authenticated and
+                serializer.instance.user != self.request.user
+        ):
             raise PermissionDenied(
                 "You do not have permission to update this profile.")
         serializer.save()
@@ -86,9 +101,14 @@ class ProfileViewSet(viewsets.ModelViewSet):
         the ForeignKey configuration (on_delete=CASCADE). Consider if this is
         the desired behavior.
         """
-        if self.request.user.is_authenticated and instance.user != self.request.user:
+        if (
+            self.request.user.is_authenticated
+            and instance.user != self.request.user
+        ):
             raise PermissionDenied(
-                "You do not have permission to delete this profile.")
+                "You do not have permission to delete this profile."
+            )
+
         instance.delete()
 
 # ==========================
@@ -115,7 +135,8 @@ class TaskViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         """
         Automatically assign the logged-in user to the created task.
-        If assigned_users are not provided in the request, assign the creating user.
+        If assigned_users are not provided in the request,
+        assign the creating user.
         """
         task = serializer.save()
         if not task.assigned_users.exists():
@@ -123,8 +144,8 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         """
-        Override perform_update to ensure the logged-in user is assigned to the task
-        before allowing the update.
+        Override perform_update to ensure the logged-in user
+        is assigned to the task before allowing the update.
         """
         task = self.get_object()
         # Check if the requesting user is assigned to the task
@@ -136,8 +157,8 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     def perform_destroy(self, instance):
         """
-        Override perform_destroy to ensure the logged-in user is assigned to the task
-        before allowing deletion.
+        Override perform_destroy to ensure the logged-in user
+        is assigned to the task before allowing deletion.
         """
         # Check if the requesting user is assigned to the task
         if self.request.user not in instance.assigned_users.all():

@@ -63,7 +63,10 @@ class Task(models.Model):
     @property
     def is_overdue(self):
         """Checks if the task's due date is in the past."""
-        return timezone.now().date() > self.due_date if self.due_date else False
+        return (
+            timezone.now().date() > self.due_date
+            if self.due_date else False
+        )
 
     def __str__(self):
         """String representation of the Task model."""
