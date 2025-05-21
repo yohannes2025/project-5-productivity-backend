@@ -95,8 +95,9 @@ class TaskViewSet(viewsets.ModelViewSet):
         Automatically assign the logged-in user to the created task.
         If assigned_users are not provided in the request,
         assign the creating user.
+
         """
-        task = serializer.save()
+        task = serializer.save(created_by=self.request.user)
         if not task.assigned_users.exists():
             task.assigned_users.set([self.request.user])
 
