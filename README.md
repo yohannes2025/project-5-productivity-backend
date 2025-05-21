@@ -1473,8 +1473,6 @@ Finally, I am profoundly grateful to the **entire Code Institute staff** for pro
 
 
 
-
-## Credits
 ### Acknowledgments
 
 - Thank you very much Code Institute Student Care Team Tutor and Mentor for your dedication and commitment in supporting me to achieve in submitting this Advanced Front-End Full Stack Software Development project and broadening my career opportunities.
