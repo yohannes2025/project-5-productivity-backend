@@ -1390,6 +1390,76 @@ raise AuthenticationFailed("User is inactive or credentials are invalid")
 
 **All Python validation tests passed successfully. All known bugs were fixed.**
 
+# 📘 Final Frontend Project Scope Reflection
+
+## 🧠 Project Background
+
+At the start of this project, I set out with a broad and ambitious plan based on a rich set of user stories. My goal was to build a productivity app with not only essential task management features, but also extra views such as:
+
+- A **user profile** section  
+- A **settings** page  
+- A **calendar view** for tasks and habits  
+
+These were inspired by real-world productivity tools and aimed at providing a professional and complete user experience.
+
+---
+
+## 🎯 What Changed
+
+As the project progressed, I faced time and resource limitations, especially while integrating backend APIs with the frontend and ensuring authentication, CRUD operations, and UX were fully functional and polished.
+
+After much consideration, I made the decision to **narrow the project scope** to focus on **core features** only — the parts of the app that deliver the most value and are essential to meet the assessment requirements.
+
+---
+
+## ✅ Final Features Implemented
+
+Here’s what the final version of the frontend includes:
+
+- ✅ Fully working **authentication system** (Login/Register using JWT)
+- ✅ Task management with:
+  - Create, read, update, delete (CRUD)
+  - File uploads
+  - Due dates, priority, state
+  - Filtering and sorting
+- ✅ Clean, responsive UI with Bootstrap
+- ✅ User feedback with spinners and alerts
+- ✅ API integration with a deployed Django backend
+
+---
+
+## ❌ Features Postponed for Later
+
+The following views/features were initially planned but **have been postponed** to a potential future upgrade:
+
+- 🚫 **User Profile View**
+- 🚫 **Settings Page**
+- 🚫 **Calendar-Based Task View**
+
+These features required more time for integration and design, and I decided not to compromise the quality of the existing features just to add more scope.
+
+---
+
+## 💬 Reflection
+
+While it was tough to let go of some planned views, I learned a valuable lesson about **prioritizing core functionality**, **maintainability**, and **realistic deadlines**. These extra features can definitely be revisited later — perhaps in version 2.0 of this project.
+
+The decision to reduce scope was not about giving up — it was about focusing on delivering a stable, complete, and well-tested MVP.
+
+---
+
+## 🚀 What's Next?
+
+I’m excited to explore the remaining features in the future:
+
+- Integrating a **calendar view** using something like `react-calendar` or `fullcalendar`
+- Allowing users to view and edit their **profile**
+- Adding a **settings panel** for personalization
+
+---
+
+Thanks to this experience, I’ve grown more confident in making practical product decisions and shipping working software — even when it means leaving some things for later.
+
 
 Credits
 ================================
